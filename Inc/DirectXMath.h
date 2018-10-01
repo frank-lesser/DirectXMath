@@ -13,10 +13,10 @@
 #error DirectX Math requires C++
 #endif
 
-#define DIRECTX_MATH_VERSION 312
+#define DIRECTX_MATH_VERSION 313
 
-#if defined(_MSC_VER) && (_MSC_VER < 1800)
-#error DirectX Math requires Visual C++ 2013 or later.
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+#error DirectX Math requires Visual C++ 2015 or later.
 #endif
 
 #if defined(_MSC_VER) && !defined(_M_ARM) && !defined(_M_ARM64) && !defined(_M_HYBRID_X86_ARM64) && (!_MANAGED) && (!_M_CEE) && (!defined(_M_IX86_FP) || (_M_IX86_FP > 1)) && !defined(_XM_NO_INTRINSICS_) && !defined(_XM_VECTORCALL_)
@@ -455,16 +455,17 @@ __declspec(align(16)) struct XMMATRIX
     XMMATRIX() = default;
 
     XMMATRIX(const XMMATRIX&) = default;
+
+#if defined(_MSC_VER) && (_MSC_FULL_VER < 191426431)
+    XMMATRIX& operator= (const XMMATRIX& M) noexcept { r[0] = M.r[0]; r[1] = M.r[1]; r[2] = M.r[2]; r[3] = M.r[3]; return *this; }
+#else
     XMMATRIX& operator=(const XMMATRIX&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMMATRIX(XMMATRIX&&) = default;
     XMMATRIX& operator=(XMMATRIX&&) = default;
+#endif
 
     constexpr XMMATRIX(FXMVECTOR R0, FXMVECTOR R1, FXMVECTOR R2, CXMVECTOR R3) : r{ R0,R1,R2,R3 } {}
-#else
-    XMMATRIX(FXMVECTOR R0, FXMVECTOR R1, FXMVECTOR R2, CXMVECTOR R3) { r[0] = R0; r[1] = R1; r[2] = R2; r[3] = R3; }
-#endif
     XMMATRIX(float m00, float m01, float m02, float m03,
              float m10, float m11, float m12, float m13,
              float m20, float m21, float m22, float m23,
@@ -506,10 +507,8 @@ struct XMFLOAT2
     XMFLOAT2(const XMFLOAT2&) = default;
     XMFLOAT2& operator=(const XMFLOAT2&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMFLOAT2(XMFLOAT2&&) = default;
     XMFLOAT2& operator=(XMFLOAT2&&) = default;
-#endif
 
     XM_CONSTEXPR XMFLOAT2(float _x, float _y) : x(_x), y(_y) {}
     explicit XMFLOAT2(_In_reads_(2) const float *pArray) : x(pArray[0]), y(pArray[1]) {}
@@ -523,10 +522,8 @@ __declspec(align(16)) struct XMFLOAT2A : public XMFLOAT2
     XMFLOAT2A(const XMFLOAT2A&) = default;
     XMFLOAT2A& operator=(const XMFLOAT2A&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMFLOAT2A(XMFLOAT2A&&) = default;
     XMFLOAT2A& operator=(XMFLOAT2A&&) = default;
-#endif
 
     XM_CONSTEXPR XMFLOAT2A(float _x, float _y) : XMFLOAT2(_x, _y) {}
     explicit XMFLOAT2A(_In_reads_(2) const float *pArray) : XMFLOAT2(pArray) {}
@@ -544,10 +541,8 @@ struct XMINT2
     XMINT2(const XMINT2&) = default;
     XMINT2& operator=(const XMINT2&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMINT2(XMINT2&&) = default;
     XMINT2& operator=(XMINT2&&) = default;
-#endif
 
     XM_CONSTEXPR XMINT2(int32_t _x, int32_t _y) : x(_x), y(_y) {}
     explicit XMINT2(_In_reads_(2) const int32_t *pArray) : x(pArray[0]), y(pArray[1]) {}
@@ -564,10 +559,8 @@ struct XMUINT2
     XMUINT2(const XMUINT2&) = default;
     XMUINT2& operator=(const XMUINT2&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMUINT2(XMUINT2&&) = default;
     XMUINT2& operator=(XMUINT2&&) = default;
-#endif
 
     XM_CONSTEXPR XMUINT2(uint32_t _x, uint32_t _y) : x(_x), y(_y) {}
     explicit XMUINT2(_In_reads_(2) const uint32_t *pArray) : x(pArray[0]), y(pArray[1]) {}
@@ -586,10 +579,8 @@ struct XMFLOAT3
     XMFLOAT3(const XMFLOAT3&) = default;
     XMFLOAT3& operator=(const XMFLOAT3&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMFLOAT3(XMFLOAT3&&) = default;
     XMFLOAT3& operator=(XMFLOAT3&&) = default;
-#endif
 
     XM_CONSTEXPR XMFLOAT3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
     explicit XMFLOAT3(_In_reads_(3) const float *pArray) : x(pArray[0]), y(pArray[1]), z(pArray[2]) {}
@@ -603,10 +594,8 @@ __declspec(align(16)) struct XMFLOAT3A : public XMFLOAT3
     XMFLOAT3A(const XMFLOAT3A&) = default;
     XMFLOAT3A& operator=(const XMFLOAT3A&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMFLOAT3A(XMFLOAT3A&&) = default;
     XMFLOAT3A& operator=(XMFLOAT3A&&) = default;
-#endif
 
     XM_CONSTEXPR XMFLOAT3A(float _x, float _y, float _z) : XMFLOAT3(_x, _y, _z) {}
     explicit XMFLOAT3A(_In_reads_(3) const float *pArray) : XMFLOAT3(pArray) {}
@@ -625,10 +614,8 @@ struct XMINT3
     XMINT3(const XMINT3&) = default;
     XMINT3& operator=(const XMINT3&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMINT3(XMINT3&&) = default;
     XMINT3& operator=(XMINT3&&) = default;
-#endif
 
     XM_CONSTEXPR XMINT3(int32_t _x, int32_t _y, int32_t _z) : x(_x), y(_y), z(_z) {}
     explicit XMINT3(_In_reads_(3) const int32_t *pArray) : x(pArray[0]), y(pArray[1]), z(pArray[2]) {}
@@ -646,10 +633,8 @@ struct XMUINT3
     XMUINT3(const XMUINT3&) = default;
     XMUINT3& operator=(const XMUINT3&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMUINT3(XMUINT3&&) = default;
     XMUINT3& operator=(XMUINT3&&) = default;
-#endif
 
     XM_CONSTEXPR XMUINT3(uint32_t _x, uint32_t _y, uint32_t _z) : x(_x), y(_y), z(_z) {}
     explicit XMUINT3(_In_reads_(3) const uint32_t *pArray) : x(pArray[0]), y(pArray[1]), z(pArray[2]) {}
@@ -669,10 +654,8 @@ struct XMFLOAT4
     XMFLOAT4(const XMFLOAT4&) = default;
     XMFLOAT4& operator=(const XMFLOAT4&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMFLOAT4(XMFLOAT4&&) = default;
     XMFLOAT4& operator=(XMFLOAT4&&) = default;
-#endif
 
     XM_CONSTEXPR XMFLOAT4(float _x, float _y, float _z, float _w) : x(_x), y(_y), z(_z), w(_w) {}
     explicit XMFLOAT4(_In_reads_(4) const float *pArray) : x(pArray[0]), y(pArray[1]), z(pArray[2]), w(pArray[3]) {}
@@ -686,10 +669,8 @@ __declspec(align(16)) struct XMFLOAT4A : public XMFLOAT4
     XMFLOAT4A(const XMFLOAT4A&) = default;
     XMFLOAT4A& operator=(const XMFLOAT4A&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMFLOAT4A(XMFLOAT4A&&) = default;
     XMFLOAT4A& operator=(XMFLOAT4A&&) = default;
-#endif
 
     XM_CONSTEXPR XMFLOAT4A(float _x, float _y, float _z, float _w) : XMFLOAT4(_x, _y, _z, _w) {}
     explicit XMFLOAT4A(_In_reads_(4) const float *pArray) : XMFLOAT4(pArray) {}
@@ -709,10 +690,8 @@ struct XMINT4
     XMINT4(const XMINT4&) = default;
     XMINT4& operator=(const XMINT4&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMINT4(XMINT4&&) = default;
     XMINT4& operator=(XMINT4&&) = default;
-#endif
 
     XM_CONSTEXPR XMINT4(int32_t _x, int32_t _y, int32_t _z, int32_t _w) : x(_x), y(_y), z(_z), w(_w) {}
     explicit XMINT4(_In_reads_(4) const int32_t *pArray) : x(pArray[0]), y(pArray[1]), z(pArray[2]), w(pArray[3]) {}
@@ -731,10 +710,8 @@ struct XMUINT4
     XMUINT4(const XMUINT4&) = default;
     XMUINT4& operator=(const XMUINT4&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMUINT4(XMUINT4&&) = default;
     XMUINT4& operator=(XMUINT4&&) = default;
-#endif
 
     XM_CONSTEXPR XMUINT4(uint32_t _x, uint32_t _y, uint32_t _z, uint32_t _w) : x(_x), y(_y), z(_z), w(_w) {}
     explicit XMUINT4(_In_reads_(4) const uint32_t *pArray) : x(pArray[0]), y(pArray[1]), z(pArray[2]), w(pArray[3]) {}
@@ -760,10 +737,8 @@ struct XMFLOAT3X3
     XMFLOAT3X3(const XMFLOAT3X3&) = default;
     XMFLOAT3X3& operator=(const XMFLOAT3X3&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMFLOAT3X3(XMFLOAT3X3&&) = default;
     XMFLOAT3X3& operator=(XMFLOAT3X3&&) = default;
-#endif
 
     XM_CONSTEXPR XMFLOAT3X3(float m00, float m01, float m02,
                             float m10, float m11, float m12,
@@ -778,7 +753,7 @@ struct XMFLOAT3X3
 };
 
 //------------------------------------------------------------------------------
-// 4x3 Matrix: 32 bit floating point components
+// 4x3 Row-major Matrix: 32 bit floating point components
 struct XMFLOAT4X3
 {
     union
@@ -791,6 +766,7 @@ struct XMFLOAT4X3
             float _41, _42, _43;
         };
         float m[4][3];
+        float f[12];
     };
 
     XMFLOAT4X3() = default;
@@ -798,10 +774,8 @@ struct XMFLOAT4X3
     XMFLOAT4X3(const XMFLOAT4X3&) = default;
     XMFLOAT4X3& operator=(const XMFLOAT4X3&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMFLOAT4X3(XMFLOAT4X3&&) = default;
     XMFLOAT4X3& operator=(XMFLOAT4X3&&) = default;
-#endif
 
     XM_CONSTEXPR XMFLOAT4X3(float m00, float m01, float m02,
                             float m10, float m11, float m12,
@@ -817,7 +791,7 @@ struct XMFLOAT4X3
     float&      operator() (size_t Row, size_t Column) { return m[Row][Column]; }
 };
 
-// 4x3 Matrix: 32 bit floating point components aligned on a 16 byte boundary
+// 4x3 Row-major Matrix: 32 bit floating point components aligned on a 16 byte boundary
 __declspec(align(16)) struct XMFLOAT4X3A : public XMFLOAT4X3
 {
     XMFLOAT4X3A() = default;
@@ -825,10 +799,8 @@ __declspec(align(16)) struct XMFLOAT4X3A : public XMFLOAT4X3
     XMFLOAT4X3A(const XMFLOAT4X3A&) = default;
     XMFLOAT4X3A& operator=(const XMFLOAT4X3A&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMFLOAT4X3A(XMFLOAT4X3A&&) = default;
     XMFLOAT4X3A& operator=(XMFLOAT4X3A&&) = default;
-#endif
 
     XM_CONSTEXPR XMFLOAT4X3A(float m00, float m01, float m02,
                             float m10, float m11, float m12,
@@ -836,9 +808,60 @@ __declspec(align(16)) struct XMFLOAT4X3A : public XMFLOAT4X3
                             float m30, float m31, float m32) :
         XMFLOAT4X3(m00,m01,m02,m10,m11,m12,m20,m21,m22,m30,m31,m32) {}
     explicit XMFLOAT4X3A(_In_reads_(12) const float *pArray) : XMFLOAT4X3(pArray) {}
+};
+
+//------------------------------------------------------------------------------
+// 3x4 Column-major Matrix: 32 bit floating point components
+struct XMFLOAT3X4
+{
+    union
+    {
+        struct
+        {
+            float _11, _12, _13, _14;
+            float _21, _22, _23, _24;
+            float _31, _32, _33, _34;
+        };
+        float m[3][4];
+        float f[12];
+    };
+
+    XMFLOAT3X4() = default;
+
+    XMFLOAT3X4(const XMFLOAT3X4&) = default;
+    XMFLOAT3X4& operator=(const XMFLOAT3X4&) = default;
+
+    XMFLOAT3X4(XMFLOAT3X4&&) = default;
+    XMFLOAT3X4& operator=(XMFLOAT3X4&&) = default;
+
+    XM_CONSTEXPR XMFLOAT3X4(float m00, float m01, float m02, float m03,
+                            float m10, float m11, float m12, float m13,
+                            float m20, float m21, float m22, float m23)
+        : _11(m00), _12(m01), _13(m02), _14(m03),
+          _21(m10), _22(m11), _23(m12), _24(m13),
+          _31(m20), _32(m21), _33(m22), _34(m23) {}
+    explicit XMFLOAT3X4(_In_reads_(12) const float *pArray);
 
     float       operator() (size_t Row, size_t Column) const { return m[Row][Column]; }
     float&      operator() (size_t Row, size_t Column) { return m[Row][Column]; }
+};
+
+// 3x4 Column-major Matrix: 32 bit floating point components aligned on a 16 byte boundary
+__declspec(align(16)) struct XMFLOAT3X4A : public XMFLOAT3X4
+{
+    XMFLOAT3X4A() = default;
+
+    XMFLOAT3X4A(const XMFLOAT3X4A&) = default;
+    XMFLOAT3X4A& operator=(const XMFLOAT3X4A&) = default;
+
+    XMFLOAT3X4A(XMFLOAT3X4A&&) = default;
+    XMFLOAT3X4A& operator=(XMFLOAT3X4A&&) = default;
+
+    XM_CONSTEXPR XMFLOAT3X4A(float m00, float m01, float m02, float m03,
+                             float m10, float m11, float m12, float m13,
+                             float m20, float m21, float m22, float m23) :
+        XMFLOAT3X4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23) {}
+    explicit XMFLOAT3X4A(_In_reads_(12) const float *pArray) : XMFLOAT3X4(pArray) {}
 };
 
 //------------------------------------------------------------------------------
@@ -862,10 +885,8 @@ struct XMFLOAT4X4
     XMFLOAT4X4(const XMFLOAT4X4&) = default;
     XMFLOAT4X4& operator=(const XMFLOAT4X4&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMFLOAT4X4(XMFLOAT4X4&&) = default;
     XMFLOAT4X4& operator=(XMFLOAT4X4&&) = default;
-#endif
 
     XM_CONSTEXPR XMFLOAT4X4(float m00, float m01, float m02, float m03,
                             float m10, float m11, float m12, float m13,
@@ -889,10 +910,8 @@ __declspec(align(16)) struct XMFLOAT4X4A : public XMFLOAT4X4
     XMFLOAT4X4A(const XMFLOAT4X4A&) = default;
     XMFLOAT4X4A& operator=(const XMFLOAT4X4A&) = default;
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
     XMFLOAT4X4A(XMFLOAT4X4A&&) = default;
     XMFLOAT4X4A& operator=(XMFLOAT4X4A&&) = default;
-#endif
 
     XM_CONSTEXPR XMFLOAT4X4A(float m00, float m01, float m02, float m03,
                              float m10, float m11, float m12, float m13,
@@ -900,9 +919,6 @@ __declspec(align(16)) struct XMFLOAT4X4A : public XMFLOAT4X4
                              float m30, float m31, float m32, float m33)
         : XMFLOAT4X4(m00,m01,m02,m03,m10,m11,m12,m13,m20,m21,m22,m23,m30,m31,m32,m33) {}
     explicit XMFLOAT4X4A(_In_reads_(16) const float *pArray) : XMFLOAT4X4(pArray) {}
-
-    float       operator() (size_t Row, size_t Column) const { return m[Row][Column]; }
-    float&      operator() (size_t Row, size_t Column) { return m[Row][Column]; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -967,6 +983,8 @@ XMVECTOR    XM_CALLCONV     XMLoadUInt4(_In_ const XMUINT4* pSource);
 XMMATRIX    XM_CALLCONV     XMLoadFloat3x3(_In_ const XMFLOAT3X3* pSource);
 XMMATRIX    XM_CALLCONV     XMLoadFloat4x3(_In_ const XMFLOAT4X3* pSource);
 XMMATRIX    XM_CALLCONV     XMLoadFloat4x3A(_In_ const XMFLOAT4X3A* pSource);
+XMMATRIX    XM_CALLCONV     XMLoadFloat3x4(_In_ const XMFLOAT3X4* pSource);
+XMMATRIX    XM_CALLCONV     XMLoadFloat3x4A(_In_ const XMFLOAT3X4A* pSource);
 XMMATRIX    XM_CALLCONV     XMLoadFloat4x4(_In_ const XMFLOAT4X4* pSource);
 XMMATRIX    XM_CALLCONV     XMLoadFloat4x4A(_In_ const XMFLOAT4X4A* pSource);
 
@@ -1003,6 +1021,8 @@ void        XM_CALLCONV     XMStoreUInt4(_Out_ XMUINT4* pDestination, _In_ FXMVE
 void        XM_CALLCONV     XMStoreFloat3x3(_Out_ XMFLOAT3X3* pDestination, _In_ FXMMATRIX M);
 void        XM_CALLCONV     XMStoreFloat4x3(_Out_ XMFLOAT4X3* pDestination, _In_ FXMMATRIX M);
 void        XM_CALLCONV     XMStoreFloat4x3A(_Out_ XMFLOAT4X3A* pDestination, _In_ FXMMATRIX M);
+void        XM_CALLCONV     XMStoreFloat3x4(_Out_ XMFLOAT3X4* pDestination, _In_ FXMMATRIX M);
+void        XM_CALLCONV     XMStoreFloat3x4A(_Out_ XMFLOAT3X4A* pDestination, _In_ FXMMATRIX M);
 void        XM_CALLCONV     XMStoreFloat4x4(_Out_ XMFLOAT4X4* pDestination, _In_ FXMMATRIX M);
 void        XM_CALLCONV     XMStoreFloat4x4A(_Out_ XMFLOAT4X4A* pDestination, _In_ FXMMATRIX M);
 
@@ -1646,7 +1666,7 @@ namespace Internal
     {
         static XMVECTOR     XM_CALLCONV     Permute(FXMVECTOR v1, FXMVECTOR v2) { return _mm_shuffle_ps(v2, v1, Shuffle); }
     };
-};
+}
 
 #endif // _XM_SSE_INTRINSICS_ && !_XM_NO_INTRINSICS_
 
@@ -1924,12 +1944,12 @@ XMGLOBALCONST XMVECTORI32 g_XMFltMax                = { { { 0x7F7FFFFF, 0x7F7FFF
 XMGLOBALCONST XMVECTORU32 g_XMNegOneMask            = { { { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF } } };
 XMGLOBALCONST XMVECTORU32 g_XMMaskA8R8G8B8          = { { { 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000 } } };
 XMGLOBALCONST XMVECTORU32 g_XMFlipA8R8G8B8          = { { { 0x00000000, 0x00000000, 0x00000000, 0x80000000 } } };
-XMGLOBALCONST XMVECTORF32 g_XMFixAA8R8G8B8          = { { { 0.0f, 0.0f, 0.0f, (float) (0x80000000U) } } };
-XMGLOBALCONST XMVECTORF32 g_XMNormalizeA8R8G8B8     = { { { 1.0f / (255.0f*(float) (0x10000)), 1.0f / (255.0f*(float) (0x100)), 1.0f / 255.0f, 1.0f / (255.0f*(float) (0x1000000)) } } };
+XMGLOBALCONST XMVECTORF32 g_XMFixAA8R8G8B8          = { { { 0.0f, 0.0f, 0.0f, float(0x80000000U) } } };
+XMGLOBALCONST XMVECTORF32 g_XMNormalizeA8R8G8B8     = { { { 1.0f / (255.0f*float(0x10000)), 1.0f / (255.0f*float(0x100)), 1.0f / 255.0f, 1.0f / (255.0f*float(0x1000000)) } } };
 XMGLOBALCONST XMVECTORU32 g_XMMaskA2B10G10R10       = { { { 0x000003FF, 0x000FFC00, 0x3FF00000, 0xC0000000 } } };
 XMGLOBALCONST XMVECTORU32 g_XMFlipA2B10G10R10       = { { { 0x00000200, 0x00080000, 0x20000000, 0x80000000 } } };
-XMGLOBALCONST XMVECTORF32 g_XMFixAA2B10G10R10       = { { { -512.0f, -512.0f*(float) (0x400), -512.0f*(float) (0x100000), (float) (0x80000000U) } } };
-XMGLOBALCONST XMVECTORF32 g_XMNormalizeA2B10G10R10  = { { { 1.0f / 511.0f, 1.0f / (511.0f*(float) (0x400)), 1.0f / (511.0f*(float) (0x100000)), 1.0f / (3.0f*(float) (0x40000000)) } } };
+XMGLOBALCONST XMVECTORF32 g_XMFixAA2B10G10R10       = { { { -512.0f, -512.0f*float(0x400), -512.0f*float(0x100000), float(0x80000000U) } } };
+XMGLOBALCONST XMVECTORF32 g_XMNormalizeA2B10G10R10  = { { { 1.0f / 511.0f, 1.0f / (511.0f*float(0x400)), 1.0f / (511.0f*float(0x100000)), 1.0f / (3.0f*float(0x40000000)) } } };
 XMGLOBALCONST XMVECTORU32 g_XMMaskX16Y16            = { { { 0x0000FFFF, 0xFFFF0000, 0x00000000, 0x00000000 } } };
 XMGLOBALCONST XMVECTORI32 g_XMFlipX16Y16            = { { { 0x00008000, 0x00000000, 0x00000000, 0x00000000 } } };
 XMGLOBALCONST XMVECTORF32 g_XMFixX16Y16             = { { { -32768.0f, 0.0f, 0.0f, 0.0f } } };
@@ -1959,7 +1979,7 @@ XMGLOBALCONST XMVECTORU32 g_XMFlipW                 = { { { 0, 0, 0, 0x80000000 
 XMGLOBALCONST XMVECTORU32 g_XMFlipYZ                = { { { 0, 0x80000000, 0x80000000, 0 } } };
 XMGLOBALCONST XMVECTORU32 g_XMFlipZW                = { { { 0, 0, 0x80000000, 0x80000000 } } };
 XMGLOBALCONST XMVECTORU32 g_XMFlipYW                = { { { 0, 0x80000000, 0, 0x80000000 } } };
-XMGLOBALCONST XMVECTORI32 g_XMMaskDec4              = { { { 0x3FF, 0x3FF << 10, 0x3FF << 20, 0x3 << 30 } } };
+XMGLOBALCONST XMVECTORI32 g_XMMaskDec4              = { { { 0x3FF, 0x3FF << 10, 0x3FF << 20, static_cast<int>(0xC0000000) } } };
 XMGLOBALCONST XMVECTORI32 g_XMXorDec4               = { { { 0x200, 0x200 << 10, 0x200 << 20, 0 } } };
 XMGLOBALCONST XMVECTORF32 g_XMAddUDec4              = { { { 0, 0, 0, 32768.0f*65536.0f } } };
 XMGLOBALCONST XMVECTORF32 g_XMAddDec4               = { { { -512.0f, -512.0f*1024.0f, -512.0f*1024.0f*1024.0f, 0 } } };
@@ -2023,6 +2043,7 @@ XMGLOBALCONST XMVECTORF32 g_UShortMax               = { { { 65535.0f, 65535.0f, 
 #ifdef _PREFAST_
 #pragma prefast(push)
 #pragma prefast(disable : 25000, "FXMVECTOR is 16 bytes")
+#pragma prefast(disable : 26495, "Union initialization confuses /analyze")
 #endif
 
 //------------------------------------------------------------------------------
@@ -2046,7 +2067,7 @@ inline XMVECTOR XM_CALLCONV XMVectorSetBinaryConstant(uint32_t C0, uint32_t C1, 
 #else // XM_SSE_INTRINSICS_
     static const XMVECTORU32 g_vMask1 = { { { 1, 1, 1, 1 } } };
     // Move the parms to a vector
-    __m128i vTemp = _mm_set_epi32(C3,C2,C1,C0);
+    __m128i vTemp = _mm_set_epi32(static_cast<int>(C3), static_cast<int>(C2), static_cast<int>(C1), static_cast<int>(C0));
     // Mask off the low bits
     vTemp = _mm_and_si128(vTemp,g_vMask1);
     // 0xFFFFFFFF on true bits
@@ -2078,7 +2099,7 @@ inline XMVECTOR XM_CALLCONV XMVectorSplatConstant(int32_t IntConstant, uint32_t 
     // Convert DivExponent into 1.0f/(1<<DivExponent)
     uint32_t uScale = 0x3F800000U - (DivExponent << 23);
     // Splat the scalar value (It's really a float)
-    vScale = vdupq_n_s32(uScale);
+    vScale = vdupq_n_u32(uScale);
     // Multiply by the reciprocal (Perform a right shift by DivExponent)
     vResult = vmulq_f32(vResult,reinterpret_cast<const float32x4_t *>(&vScale)[0]);
     return vResult;
@@ -2090,7 +2111,7 @@ inline XMVECTOR XM_CALLCONV XMVectorSplatConstant(int32_t IntConstant, uint32_t 
     // Convert DivExponent into 1.0f/(1<<DivExponent)
     uint32_t uScale = 0x3F800000U - (DivExponent << 23);
     // Splat the scalar value (It's really a float)
-    vScale = _mm_set1_epi32(uScale);
+    vScale = _mm_set1_epi32(static_cast<int>(uScale));
     // Multiply by the reciprocal (Perform a right shift by DivExponent)
     vResult = _mm_mul_ps(vResult,_mm_castsi128_ps(vScale));
     return vResult;
